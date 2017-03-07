@@ -11,6 +11,8 @@ resource "aws_subnet" "public" {
   tags {
     Name = "${var.aws_conf["domain"]} Public Subnet ${element(data.aws_availability_zones.vpc_az.names, count.index)}"
     Stack = "${var.aws_conf["domain"]}"
+    AvailabilityZone = "${element(data.aws_availability_zones.vpc_az.names, count.index)}"
+    Type = "public"
   }
   depends_on = ["aws_vpc.default"]
   lifecycle {
