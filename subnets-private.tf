@@ -1,7 +1,5 @@
 resource "aws_subnet" "private" {
-  count = "${length(split(",", var.aws_conf["availability_zones"]))}"
-  # https://github.com/hashicorp/terraform/issues/3888
-  # count = "${length(data.aws_availability_zones.vpc_az.names)}"
+  count = "${length(data.aws_availability_zones.vpc_az.names)}"
   vpc_id = "${aws_vpc.default.id}"
 
   cidr_block = "${cidrsubnet(var.aws_conf["cidr_block"], 4, length(data.aws_availability_zones.vpc_az.names) + count.index + 1)}"
@@ -21,8 +19,7 @@ resource "aws_subnet" "private" {
 }
 
 resource "aws_eip" "nat" {
-  count = "${length(split(",", var.aws_conf["availability_zones"]))}"
-  /*count = "${length(data.aws_availability_zones.vpc_az.names)}"*/
+  count = "${length(data.aws_availability_zones.vpc_az.names)}"
   vpc = true
 
   depends_on = ["aws_vpc.default"]
@@ -33,8 +30,7 @@ resource "aws_eip" "nat" {
 }
 
 resource "aws_nat_gateway" "nat-gw" {
-  count = "${length(split(",", var.aws_conf["availability_zones"]))}"
-  /*count = "${length(data.aws_availability_zones.vpc_az.names)}"*/
+  count = "${length(data.aws_availability_zones.vpc_az.names)}"
   depends_on = ["aws_internet_gateway.default"]
   allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
   subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
@@ -47,8 +43,7 @@ resource "aws_nat_gateway" "nat-gw" {
 }
 
 resource "aws_route_table" "private" {
-  count = "${length(split(",", var.aws_conf["availability_zones"]))}"
-  /*count = "${length(data.aws_availability_zones.vpc_az.names)}"*/
+  count = "${length(data.aws_availability_zones.vpc_az.names)}"
   vpc_id = "${aws_vpc.default.id}"
 
   route {
@@ -68,8 +63,7 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "private" {
-  count = "${length(split(",", var.aws_conf["availability_zones"]))}"
-  /*count = "${length(data.aws_availability_zones.vpc_az.names)}"*/
+  count = "${length(data.aws_availability_zones.vpc_az.names)}"
   subnet_id = "${element(aws_subnet.private.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
 

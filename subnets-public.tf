@@ -1,7 +1,5 @@
 resource "aws_subnet" "public" {
-  count = "${length(split(",", var.aws_conf["availability_zones"]))}"
-  # https://github.com/hashicorp/terraform/issues/3888
-  # count = "${length(data.aws_availability_zones.vpc_az.names)}"
+  count = "${length(data.aws_availability_zones.vpc_az.names)}"
   vpc_id = "${aws_vpc.default.id}"
 
   cidr_block = "${cidrsubnet(var.aws_conf["cidr_block"], 4, count.index + 1)}"
@@ -41,9 +39,7 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "public" {
-  count = "${length(split(",", var.aws_conf["availability_zones"]))}"
-  # https://github.com/hashicorp/terraform/issues/3888
-  # count = "${length(data.aws_availability_zones.vpc_az.names)}"
+  count = "${length(data.aws_availability_zones.vpc_az.names)}"
   subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
   route_table_id = "${aws_route_table.public.id}"
 
