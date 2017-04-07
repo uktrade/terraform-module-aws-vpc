@@ -62,6 +62,13 @@ resource "aws_route_table" "private" {
   }
 }
 
+resource "aws_vpc_endpoint_route_table_association" "private_vpc_endpoint" {
+  count = "${length(data.aws_availability_zones.vpc_az.names)}"
+  vpc_endpoint_id = "${aws_vpc_endpoint.vpc_endpoint.id}"
+  route_table_id  = "${element(aws_route_table.private.*.id, count.index)}"
+  depends_on = ["aws_route_table.private"]
+}
+
 resource "aws_route_table_association" "private" {
   count = "${length(data.aws_availability_zones.vpc_az.names)}"
   subnet_id = "${element(aws_subnet.private.*.id, count.index)}"

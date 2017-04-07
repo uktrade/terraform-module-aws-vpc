@@ -66,6 +66,11 @@ resource "aws_vpc_dhcp_options_association" "search" {
   }
 }
 
+resource "aws_vpc_endpoint" "vpc_endpoint" {
+  vpc_id = "${aws_vpc.default.id}"
+  service_name = "com.amazonaws.${data.aws_region.region.name}.s3"
+}
+
 resource "aws_vpn_gateway" "vpn_gw" {
   vpc_id = "${aws_vpc.default.id}"
 

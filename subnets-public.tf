@@ -38,6 +38,12 @@ resource "aws_route_table" "public" {
   }
 }
 
+resource "aws_vpc_endpoint_route_table_association" "public_vpc_endpoint" {
+  vpc_endpoint_id = "${aws_vpc_endpoint.vpc_endpoint.id}"
+  route_table_id  =  "${aws_route_table.public.id}"
+  depends_on = ["aws_route_table.public"]
+}
+
 resource "aws_route_table_association" "public" {
   count = "${length(data.aws_availability_zones.vpc_az.names)}"
   subnet_id = "${element(aws_subnet.public.*.id, count.index)}"
