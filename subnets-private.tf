@@ -54,7 +54,7 @@ resource "aws_route_table" "private" {
   }
 
   route {
-    ipv6_cidr_block        = "::/0"
+    ipv6_cidr_block = "::/0"
     egress_only_gateway_id = "${aws_egress_only_internet_gateway.ipv6-gw.id}"
   }
 
@@ -72,8 +72,7 @@ resource "aws_route_table" "private" {
 resource "aws_vpc_endpoint_route_table_association" "private_vpc_endpoint" {
   count = "${length(data.aws_availability_zones.vpc_az.names)}"
   vpc_endpoint_id = "${aws_vpc_endpoint.vpc_endpoint.id}"
-  route_table_id  = "${element(aws_route_table.private.*.id, count.index)}"
-  depends_on = ["aws_route_table.private"]
+  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
 }
 
 resource "aws_route_table_association" "private" {
