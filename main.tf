@@ -10,6 +10,7 @@ data "aws_region" "region" {
 resource "aws_vpc" "default" {
   cidr_block = "${var.aws_conf["cidr_block"]}"
   enable_dns_hostnames = true
+  assign_generated_ipv6_cidr_block = true
 
   tags {
     Name = "${var.aws_conf["domain"]} VPC"
@@ -34,6 +35,15 @@ resource "aws_internet_gateway" "default" {
     Stack = "${var.aws_conf["domain"]}"
   }
   depends_on = ["aws_vpc.default"]
+  lifecycle {
+    create_before_destroy = true
+    prevent_destroy = true
+  }
+}
+
+resource "aws_egress_only_internet_gateway" "ipv6-gw" {
+  vpc_id = "${aws_vpc.default.id}"
+
   lifecycle {
     create_before_destroy = true
     prevent_destroy = true
@@ -95,7 +105,7 @@ resource "aws_security_group" "base-sg" {
     from_port = 0
     to_port = 0
     protocol = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0", "::/0"]
   }
 
   ingress {
