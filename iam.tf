@@ -16,7 +16,7 @@ resource "aws_iam_role_policy" "default" {
 resource "aws_iam_instance_profile" "default" {
   name = "${var.aws_conf["domain"]}-profile"
   path = "/"
-  roles = ["${aws_iam_role.default.name}"]
+  role = "${aws_iam_role.default.name}"
 
   lifecycle {
     create_before_destroy = true
