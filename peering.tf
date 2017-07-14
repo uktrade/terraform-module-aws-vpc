@@ -1,6 +1,6 @@
 provider "aws" {
   region = "${var.aws_conf["region"]}"
-  alias = "aws.peer"
+  alias = "peer"
 }
 
 data "aws_vpc_peering_connection" "peer" {
