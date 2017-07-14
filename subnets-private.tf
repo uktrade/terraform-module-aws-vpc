@@ -51,6 +51,11 @@ resource "aws_route_table" "private" {
     nat_gateway_id = "${element(aws_nat_gateway.nat-gw.*.id, count.index)}"
   }
 
+  route {
+    cidr_block = "${var.aws_conf["peering.cidr_block"]}"
+    vpc_peering_connection_id = "${data.aws_vpc_peering_connection.peer.id}"
+  }
+
   tags {
     Name = "${var.aws_conf["domain"]} Private Routing Table ${element(data.aws_availability_zones.vpc_az.names, count.index)}"
     Stack = "${var.aws_conf["domain"]}"
