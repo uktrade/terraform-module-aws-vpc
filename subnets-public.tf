@@ -7,8 +7,8 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags {
-    Name = "${var.aws_conf["domain"]} Public Subnet ${element(data.aws_availability_zones.vpc_az.names, count.index)}"
-    Stack = "${var.aws_conf["domain"]}"
+    Name = "${var.aws_conf["project"]} Public Subnet ${element(data.aws_availability_zones.vpc_az.names, count.index)}"
+    Stack = "${var.aws_conf["project"]}"
     AvailabilityZone = "${element(data.aws_availability_zones.vpc_az.names, count.index)}"
     Type = "public"
   }
@@ -33,8 +33,8 @@ resource "aws_route_table" "public" {
   }
 
   tags {
-    Name = "${var.aws_conf["domain"]} Public Routing Table ${join("/", data.aws_availability_zones.vpc_az.names)}"
-    Stack = "${var.aws_conf["domain"]}"
+    Name = "${var.aws_conf["project"]} Public Routing Table ${join("/", data.aws_availability_zones.vpc_az.names)}"
+    Stack = "${var.aws_conf["project"]}"
   }
   depends_on = ["aws_subnet.public"]
   lifecycle {

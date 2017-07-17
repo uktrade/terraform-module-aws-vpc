@@ -12,8 +12,8 @@ resource "aws_vpc" "default" {
   enable_dns_hostnames = true
 
   tags {
-    Name = "${var.aws_conf["domain"]} VPC"
-    Stack = "${var.aws_conf["domain"]}"
+    Name = "${var.aws_conf["project"]} VPC"
+    Stack = "${var.aws_conf["project"]}"
   }
 
   lifecycle {
@@ -30,8 +30,8 @@ resource "aws_internet_gateway" "default" {
   vpc_id = "${aws_vpc.default.id}"
 
   tags {
-    Name = "${var.aws_conf["domain"]} VPC Gateway"
-    Stack = "${var.aws_conf["domain"]}"
+    Name = "${var.aws_conf["project"]} VPC Gateway"
+    Stack = "${var.aws_conf["project"]}"
   }
   depends_on = ["aws_vpc.default"]
   lifecycle {
@@ -41,12 +41,12 @@ resource "aws_internet_gateway" "default" {
 }
 
 resource "aws_vpc_dhcp_options" "search" {
-  domain_name = "${var.aws_conf["domain"]}"
+  domain_name = "${var.aws_conf["project"]}"
   domain_name_servers = ["AmazonProvidedDNS"]
 
   tags {
-    Name = "${var.aws_conf["domain"]} DHCP"
-    Stack = "${var.aws_conf["domain"]}"
+    Name = "${var.aws_conf["project"]} DHCP"
+    Stack = "${var.aws_conf["project"]}"
   }
   depends_on = ["aws_subnet.public", "aws_subnet.private"]
   lifecycle {
@@ -75,8 +75,8 @@ resource "aws_vpn_gateway" "vpn_gw" {
   vpc_id = "${aws_vpc.default.id}"
 
   tags {
-    Name = "${var.aws_conf["domain"]} VPN Gateway"
-    Stack = "${var.aws_conf["domain"]}"
+    Name = "${var.aws_conf["project"]} VPN Gateway"
+    Stack = "${var.aws_conf["project"]}"
   }
   depends_on = ["aws_vpc.default"]
   lifecycle {
@@ -86,7 +86,7 @@ resource "aws_vpn_gateway" "vpn_gw" {
 }
 
 resource "aws_security_group" "base-sg" {
-  name = "${var.aws_conf["domain"]}-base-sg"
+  name = "${var.aws_conf["project"]}-base-sg"
   description = "Allow outgoing traffic"
 
   vpc_id = "${aws_vpc.default.id}"
@@ -106,8 +106,8 @@ resource "aws_security_group" "base-sg" {
   }
 
   tags {
-    Name = "${var.aws_conf["domain"]} default SG"
-    Stack = "${var.aws_conf["domain"]}"
+    Name = "${var.aws_conf["project"]} default SG"
+    Stack = "${var.aws_conf["project"]}"
   }
   depends_on = ["aws_vpc.default"]
   lifecycle {

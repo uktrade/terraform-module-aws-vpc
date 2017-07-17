@@ -6,8 +6,8 @@ resource "aws_subnet" "private" {
   availability_zone = "${element(data.aws_availability_zones.vpc_az.names, count.index)}"
 
   tags {
-    Name = "${var.aws_conf["domain"]} Private Subnet ${element(data.aws_availability_zones.vpc_az.names, count.index)}"
-    Stack = "${var.aws_conf["domain"]}"
+    Name = "${var.aws_conf["project"]} Private Subnet ${element(data.aws_availability_zones.vpc_az.names, count.index)}"
+    Stack = "${var.aws_conf["project"]}"
     AvailabilityZone = "${element(data.aws_availability_zones.vpc_az.names, count.index)}"
     Type = "private"
   }
@@ -57,8 +57,8 @@ resource "aws_route_table" "private" {
   }
 
   tags {
-    Name = "${var.aws_conf["domain"]} Private Routing Table ${element(data.aws_availability_zones.vpc_az.names, count.index)}"
-    Stack = "${var.aws_conf["domain"]}"
+    Name = "${var.aws_conf["project"]} Private Routing Table ${element(data.aws_availability_zones.vpc_az.names, count.index)}"
+    Stack = "${var.aws_conf["project"]}"
   }
   depends_on = ["aws_nat_gateway.nat-gw"]
   lifecycle {
