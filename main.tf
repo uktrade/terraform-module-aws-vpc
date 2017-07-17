@@ -105,6 +105,13 @@ resource "aws_security_group" "base-sg" {
     cidr_blocks = ["${var.aws_conf["cidr_block"]}"]
   }
 
+  ingress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["${var.aws_conf["peering.cidr_block"]}"]
+  }
+
   tags {
     Name = "${var.aws_conf["project"]} default SG"
     Stack = "${var.aws_conf["project"]}"

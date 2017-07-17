@@ -16,6 +16,7 @@ data "null_data_source" "vpc_conf" {
     nat_private = "${join(",", aws_nat_gateway.nat-gw.*.private_ip)}"
     ami = "${data.aws_ami.ami.image_id}"
     s3_endpoint = "${join(",", aws_vpc_endpoint.vpc_endpoint.cidr_blocks)}"
+    acm_certificate = "${data.aws_acm_certificate.acm_certificate.arn}"
   }
 }
 
@@ -35,6 +36,7 @@ output "vpc_conf" {
               "nat_public", "${join(",", aws_nat_gateway.nat-gw.*.public_ip)}",
               "nat_private", "${join(",", aws_nat_gateway.nat-gw.*.private_ip)}",
               "ami", "${data.aws_ami.ami.image_id}",
-              "s3_endpoint", "${join(",", aws_vpc_endpoint.vpc_endpoint.cidr_blocks)}"
+              "s3_endpoint", "${join(",", aws_vpc_endpoint.vpc_endpoint.cidr_blocks)}",
+              "acm_certificate", "${data.aws_acm_certificate.acm_certificate.arn}"
             )}"
 }

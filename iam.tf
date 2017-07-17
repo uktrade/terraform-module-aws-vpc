@@ -22,3 +22,8 @@ resource "aws_iam_instance_profile" "default" {
     create_before_destroy = true
   }
 }
+
+data "aws_acm_certificate" "acm_certificate" {
+  domain = "${var.aws_conf["domain"]}"
+  statuses = ["ISSUED"]
+}
