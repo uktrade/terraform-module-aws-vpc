@@ -45,8 +45,13 @@ resource "aws_route_table" "public" {
   }
 }
 
-resource "aws_vpc_endpoint_route_table_association" "public_vpc_endpoint" {
-  vpc_endpoint_id = "${aws_vpc_endpoint.vpc_endpoint.id}"
+resource "aws_vpc_endpoint_route_table_association" "public_vpc_endpoint_s3" {
+  vpc_endpoint_id = "${aws_vpc_endpoint.vpc_endpoint_s3.id}"
+  route_table_id = "${aws_route_table.public.id}"
+}
+
+resource "aws_vpc_endpoint_route_table_association" "public_vpc_endpoint_dynamodb" {
+  vpc_endpoint_id = "${aws_vpc_endpoint.vpc_endpoint_dynamodb.id}"
   route_table_id = "${aws_route_table.public.id}"
 }
 

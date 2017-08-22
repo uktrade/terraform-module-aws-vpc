@@ -69,9 +69,15 @@ resource "aws_route_table" "private" {
   }
 }
 
-resource "aws_vpc_endpoint_route_table_association" "private_vpc_endpoint" {
+resource "aws_vpc_endpoint_route_table_association" "private_vpc_endpoint_s3" {
   count = "${length(data.aws_availability_zones.vpc_az.names)}"
-  vpc_endpoint_id = "${aws_vpc_endpoint.vpc_endpoint.id}"
+  vpc_endpoint_id = "${aws_vpc_endpoint.vpc_endpoint_s3.id}"
+  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
+}
+
+resource "aws_vpc_endpoint_route_table_association" "private_vpc_endpoint_dynamodb" {
+  count = "${length(data.aws_availability_zones.vpc_az.names)}"
+  vpc_endpoint_id = "${aws_vpc_endpoint.vpc_endpoint_dynamodb.id}"
   route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
 }
 
